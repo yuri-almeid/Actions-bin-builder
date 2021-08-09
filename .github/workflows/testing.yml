@@ -17,6 +17,7 @@ jobs:
       - name: Builder
         run: |
           sudo apt-get install python3-dev
+          pip3 install pyinstaller
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
