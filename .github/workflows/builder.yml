@@ -1,0 +1,56 @@
+
+name: Snackin' .py Builder
+
+on:
+  push:
+    branches: [ production ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
+      
+      - name: Builder
+        if: github.event_name == 'push' && github.ref == 'refs/heads/production'
+        run: |
+          
+          echo Init 🏁
+          export NAME="$(git log -1 --format=%s)"
+          export TAG="$(git log -1 --format=%b)"          
+          
+          if [ $NAME = "build-it" ]
+          then
+            echo "Start Builder"
+            echo Nome:
+            echo $NAME
+            echo Tag:
+            echo $TAG
+            if [ ! -d "releases/" ]; then
+              mkdir releases
+            fi
+            if [ ! -d "releases/binaries/" ]; then
+              mkdir releases/binaries
+            fi
+            echo Creating packages
+            zip -r $TAG.zip . -x ".git/*" ".github/*" "releases/*" ".vscode/" ".gitignore" 
+            mv $TAG.zip releases/
+            
+            
+            
+            echo Uptade git
+            git config --global user.email "yurilima95@gmail.com"
+            git config --global user.name "yuri-almeid"
+            git add .
+            git commit -m "📦 - Actions: Package $TAG builded"
+            git push
+          else
+            echo "Not building..."
+          fi
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
