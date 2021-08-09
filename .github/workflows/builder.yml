@@ -40,6 +40,8 @@ jobs:
             zip -r $TAG.zip . -x ".git/*" ".github/*" "releases/*" ".vscode/" ".gitignore" 
             mv $TAG.zip releases/
             
+            mkdir temp
+            cd temp
             
             
             echo Uptade git
