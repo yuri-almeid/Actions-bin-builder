@@ -18,6 +18,15 @@ jobs:
         run: |
           sudo apt-get install python3-dev
           pip3 install pyinstaller
+          
+          mkdir temp
+          cd temp
+          pyinstaller ../hello.py --onefile
+          ls
+          cd ..
+          echo ------
+          ls
+          
         shell: bash
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
